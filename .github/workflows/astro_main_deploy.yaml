@@ -32,7 +32,7 @@ env:
   DEPLOYMENT_ID: clgld5gzn08368nwaarplb91e
 
 jobs:
-  create-deployment-preview:
+  deploy_to_prod:
     runs-on: ubuntu-latest
     steps:
     - name: checkout repo

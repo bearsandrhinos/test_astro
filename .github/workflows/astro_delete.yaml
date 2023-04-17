@@ -33,15 +33,15 @@ env:
   DEPLOYMENT_ID: clgld5gzn08368nwaarplb91e
 
 jobs:
-  create-deployment-preview:
+  delete-deployment-preview:
     runs-on: ubuntu-latest
     steps:
     - name: checkout repo
       uses: actions/checkout@v3
     - name: get branch name
       shell: bash
-      run: echo "BRANCH_NAME=$(echo "${{ github.event.ref }} - ${{ github.event.ref_type }}")" >> $GITHUB_ENV
-    - name: Create and Deploy to Deployment Preview
+      run: echo "BRANCH_NAME=${{ github.event.ref }}" >> $GITHUB_ENV
+    - name: Delete Deployment Preview
       shell: bash
       run: |
         # install the Astro CLI
