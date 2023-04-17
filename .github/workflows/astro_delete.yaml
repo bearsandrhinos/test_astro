@@ -20,7 +20,7 @@
 #         deployment-id: clgld5gzn08368nwaarplb91e
 
 
-name: Astronomer CI - Create deployment preview
+name: Astronomer CI - Delete deployment preview
 
 on:
   delete:
@@ -49,7 +49,7 @@ jobs:
 
         # get deployment preview name
         DEPLOYMENT_NAME="$(astro deployment inspect $DEPLOYMENT_ID --key configuration.name)"
-        BRANCH_DEPLOYMENT_NAME=${{ env.BRANCH_NAME }}_$DEPLOYMENT_NAME
+        BRANCH_DEPLOYMENT_NAME=${{ github.event.ref }}_$DEPLOYMENT_NAME
         BRANCH_DEPLOYMENT_NAME="${BRANCH_DEPLOYMENT_NAME// /_}"
         
         # Delete new deploymeent preview based on the deployment template file

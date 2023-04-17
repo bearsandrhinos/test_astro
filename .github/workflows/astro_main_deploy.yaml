@@ -19,7 +19,7 @@
 #         deployment-id: clgld5gzn08368nwaarplb91e
 
 
-name: Astronomer CI - Create deployment preview
+name: Astronomer CI - Push to Prod
 
 on:
   push:
