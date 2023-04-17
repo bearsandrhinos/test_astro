@@ -1,4 +1,26 @@
-name: Astronomer CI - Delete Deployment Preview
+# name: Astronomer CI - Delete Deployment Preview
+
+# on:
+#   delete:
+#     branches:
+#     - "**"
+
+# env:
+#   ## Sets Deployment API key credentials as environment variables
+#   ASTRO_API_TOKEN: ${{ secrets.ASTRO_API_TOKEN }}
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Create Deployment Preivew
+#       uses: astronomer/deploy-action@v0.2
+#       with:
+#         action: delete-deployment-preview
+#         deployment-id: clgld5gzn08368nwaarplb91e
+
+
+name: Astronomer CI - Create deployment preview
 
 on:
   delete:
@@ -8,13 +30,27 @@ on:
 env:
   ## Sets Deployment API key credentials as environment variables
   ASTRO_API_TOKEN: ${{ secrets.ASTRO_API_TOKEN }}
+  DEPLOYMENT_ID: clgld5gzn08368nwaarplb91e
 
 jobs:
-  deploy:
+  create-deployment-preview:
     runs-on: ubuntu-latest
     steps:
-    - name: Create Deployment Preivew
-      uses: astronomer/deploy-action@v0.2
-      with:
-        action: delete-deployment-preview
-        deployment-id: clgld5gzn08368nwaarplb91e
+    - name: checkout repo
+      uses: actions/checkout@v3
+    - name: get branch name
+      shell: bash
+      run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+    - name: Create and Deploy to Deployment Preview
+      shell: bash
+      run: |
+        # install the Astro CLI
+        curl -sSL https://install.astronomer.io | sudo bash -s
+
+        # get deployment preview name
+        DEPLOYMENT_NAME="$(astro deployment inspect $DEPLOYMENT_ID --key configuration.name)"
+        BRANCH_DEPLOYMENT_NAME=${{ env.BRANCH_NAME }}_$DEPLOYMENT_NAME
+        BRANCH_DEPLOYMENT_NAME="${BRANCH_DEPLOYMENT_NAME// /_}"
+        
+        # Delete new deploymeent preview based on the deployment template file
+        astro deployment delete -n $BRANCH_DEPLOYMENT_NAME
