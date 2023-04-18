@@ -53,4 +53,4 @@ jobs:
         BRANCH_DEPLOYMENT_NAME="${BRANCH_DEPLOYMENT_NAME// /_}"
         
         # Delete new deploymeent preview based on the deployment template file
-        astro deployment delete -n $BRANCH_DEPLOYMENT_NAME
+        astro deployment delete -n $BRANCH_DEPLOYMENT_NAME -f
