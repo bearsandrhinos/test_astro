@@ -39,4 +39,6 @@ with DAG(dag_id='test',
 
     end = EmptyOperator(task_id='end')
 
-start  >> test_query >> end
+    end_squared = EmptyOperator(task_id='end_squared')
+
+start  >> test_query >> [end, end_squared]
