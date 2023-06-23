@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.decorators import task
 from airflow.operators.empty import EmptyOperator
+from airflow.providers.google.cloud.operators.bigquery import BigQueryExecuteQueryOperator
 from datetime import datetime, timedelta 
 
 dag_owner = ''
@@ -14,7 +15,7 @@ default_args = {'owner': dag_owner,
 with DAG(dag_id='test',
         default_args=default_args,
         description='',
-        start_date=datetime(1,1,2023),
+        start_date=datetime(2023, 1, 1),
         schedule_interval='None',
         catchup=False,
         tags=['']
@@ -22,7 +23,16 @@ with DAG(dag_id='test',
 
     start = EmptyOperator(task_id='start')
 
+    test_query = BigQueryExecuteQueryOperator (
+        task_id='test_query',
+        sql = 'SELECT first_name FROM `i-love-basketball.fpl.elements` LIMIT 1',
+        destination_dataset_table=None,
+        write_disposition='WRITE_EMPTY',
+        gcp_conn_id='google-cloud-default',
+        use_legacy_sql=False,
+        )
+
 
     end = EmptyOperator(task_id='end')
 
-    start  >> end
+    start  >> test_query >> end
